@@ -1,8 +1,9 @@
 package utilities;
+import java.util.NoSuchElementException;
 
 /**
- * @author Dat / Airzy / Eric
- * @version 1.0
+ * @author Dat, Airzy, Eric
+ * @version 1.1
  *
  * <p>
  *     The <code>StackADT</code> class is designed to be used as a basis for the stack structure that will be developed and implemented for CPRG304-Assignment2 Part-2.
@@ -19,6 +20,10 @@ public interface StackADT<E> {
      * Precondition: Have at least one value in the stack.
      *
      * Postcondition: The last value of the stack is removed from the stack.
+     *
+     * @throws NoSuchElementException if there are no values within the stack.
+     *
+     * @return the value that was removed from the stack.
      */
     public E pop();
 
@@ -39,6 +44,10 @@ public interface StackADT<E> {
      * Precondition: An existing stack must be present to be peeked at.
      *
      * Postcondition: The value at the top of the stack is determined.
+     *
+     * @throws NoSuchElementException if there are no values within the stack.
+     *
+     * @return the value at the top of the stack.
      */
     public E peek();
 
@@ -61,18 +70,18 @@ public interface StackADT<E> {
      * @param  otherStack: The other stack to be compared to.
      * @return True if the stacks are the same. False if the stacks are different.
      */
-    public boolean equals(StackADT<E> otherStack);
+    public boolean isEqualTo(StackADT<E> otherStack);
 
     /**
-     * Method to convert the stack into an array list.
+     * Method to convert the stack into an array.
      *
      * Precondition: An existing stack must be present.
      *
-     * Postcondition: An array list of all the contents from the stack is created.
+     * Postcondition: An array of all the contents from the stack is created.
      *
-     * @return the array list that has the same components as the stack it was based on.
+     * @return the array that has the same components as the stack it was based on.
      */
-    public E[] toArray();
+    public Object[] toArray();
 
     /**
      * Method to search where the value is in the stack.
@@ -84,6 +93,7 @@ public interface StackADT<E> {
      * @param obj: the specific value to be searched for within the stack.
      *
      * @return the int position of where it is located within the stack.
+     *          It also returns -1 if the value is not found.
      */
     public int search(E obj);
 
@@ -97,7 +107,7 @@ public interface StackADT<E> {
      * @param obj: the specific value to searched for to determine whether or not it exists within the stack.
      * @return True if the value exists within the stack. False if it does not.
      */
-    boolean contains(E obj);
+    public boolean contains(E obj);
 
     /**
      * Method to check if the stack is empty or not.
