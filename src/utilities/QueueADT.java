@@ -1,6 +1,6 @@
 package utilities;
 import exceptions.EmptyQueueException;
-import implementations.Iterator;
+import utilities.Iterator;
 
 /**
  * first in first out.

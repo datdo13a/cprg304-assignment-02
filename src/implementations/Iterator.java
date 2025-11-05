@@ -1,5 +1,5 @@
 package implementations;
 
-public class Iterator<T> {
-	// not implemented yet lol
+public class Iterator {
+
 }
