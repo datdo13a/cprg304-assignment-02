@@ -1,159 +1,131 @@
 package utilities;
-import exceptions.EmptyQueueException;
-import implementations.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author Dat, Airzy, Eric
  * @version 1.1
  *
  * <p>
- *     The <code>QueueADT</code> class is designed to be used as a basis for the queue structure that will be developed and implemented for CPRG304-Assignment2 Part-2.
+ *     The <code>StackADT</code> class is designed to be used as a basis for the stack structure that will be developed and implemented for CPRG304-Assignment2 Part-2.
  * </p>
  *
- * @param <E> object type held in the queue.
+ * @param <E> The object that is held in the stack.
  */
 
 public interface StackADT<E> {
-	/**
-     * Enqueue (add) an element to the tail (end) of the queue.
-     *
-     * Precondition: A queue instance must exist.
-     * Postcondition: The element is added to the tail; size increases by one.
-     *
-     * @param obj the element to add
-     * @throws NullPointerException if {@code obj} is null.
-     */
-    public void enqueue(E obj);
 
     /**
-     * Dequeue (remove) and return the element at the head (front) of the queue.
+     * Method to pop(remove) the top(last) value of the stack.
      *
-     * Precondition: The queue contains at least one element.
-     * Postcondition: The head element is removed; size decreases by one.
+     * Precondition: Have at least one value in the stack.
      *
-     * @return the element removed from the head of the queue.
-     * @throws EmptyQueueException if the queue is empty.
+     * Postcondition: The last value of the stack is removed from the stack.
+     *
+     * @throws NoSuchElementException if there are no values within the stack.
+     *
+     * @return the value that was removed from the stack.
      */
-    public E dequeue() throws EmptyQueueException;
+    public E pop();
 
     /**
-     * Remove all elements from the queue.
+     * Method to push(add) a value to the top of the stack.
      *
-     * Precondition: A queue instance exists.
-     * Postcondition: The queue becomes empty and size is zero.
+     * Precondition: An existing stack must be present to be pushed to.
+     *
+     * Postcondition: The stack gains an additional value at the end of the stack.
+     *
+     * @param obj: the obj is added to the end of the stack
      */
-    public void dequeueAll();
+    public void push(E obj);
 
     /**
-     * Peek (inspect) the element at the head of the queue without removing it.
+     * Method to get the value at the top of the stack without altering the stack.
      *
-     * Precondition: The queue contains at least one element.
-     * Postcondition: The head element is returned; queue unchanged.
+     * Precondition: An existing stack must be present to be peeked at.
      *
-     * @return the element at the head of the queue.
-     * @throws EmptyQueueException if the queue is empty.
+     * Postcondition: The value at the top of the stack is determined.
+     *
+     * @throws NoSuchElementException if there are no values within the stack.
+     *
+     * @return the value at the top of the stack.
      */
-    public E peek() throws EmptyQueueException;
+    public E peek();
 
     /**
-     * Return the number of elements in the queue.
+     * Method to determine the size (how many values) of the stack.
      *
-     * Precondition: None.
-     * Postcondition: The number of elements is returned.
+     * Precondition: None
      *
-     * @return the size of the queue.
+     * Postcondition: The size and the number of values inside the stack is determined.
      */
     public int size();
 
     /**
-     * Compare this queue to another queue to determine if they contain the same
-     * elements in the same order.
+     * Method to compare two stacks and determine if they have the same exact values in the same order.
      *
-     * Precondition: Two queues are available to be compared.
-     * Postcondition: A boolean result indicating equality is returned.
+     * Precondition: Two stacks are available to be compared.
      *
-     * @param otherQueue the other queue to compare to.
-     * @return true if queues contain identical elements in the same order; false otherwise.
+     * Postcondition: The result if the stacks are the same or not.
+     *
+     * @param  otherStack: The other stack to be compared to.
+     * @return True if the stacks are the same. False if the stacks are different.
      */
-    public boolean equals(QueueADT<E> otherQueue);
+    public boolean isEqualTo(StackADT<E> otherStack);
 
     /**
-     * Convert the queue contents to an Object array from head to tail.
+     * Method to convert the stack into an array.
      *
-     * Precondition: Queue exists.
-     * Postcondition: An Object[] containing queue contents (head->tail) is returned.
+     * Precondition: An existing stack must be present.
      *
-     * @return an Object[] of all queue elements (head first).
+     * Postcondition: An array of all the contents from the stack is created.
+     *
+     * @return the array that has the same components as the stack it was based on.
      */
     public Object[] toArray();
 
     /**
-     * Convert the queue contents to an array of type E. If the provided array
-     * has sufficient length it is filled and returned; otherwise a new array
-     * of the same runtime type is created and returned.
+     * Method to search where the value is in the stack.
      *
-     * Precondition: Queue exists and the array parameter is non-null.
-     * Postcondition: An array containing queue contents (head->tail) is returned.
+     * Precondition: A stack must already be present.
      *
-     * @param arr the array into which the elements of the queue are to be stored
-     * @return an array containing the elements of the queue
-     * @throws NullPointerException if {@code arr} is null.
-     */
-    public E[] toArray(E[] arr);
-
-    /**
-     * Search for the given element and return its 1-based position in the queue
-     * (head is position 1). Return -1 if not found.
+     * Postcondition: The position of the value is stated.
      *
-     * Precondition: Queue exists.
-     * Postcondition: Index (1-based) of the first matching element is returned, or -1.
+     * @param obj: the specific value to be searched for within the stack.
      *
-     * @param obj the element to search for
-     * @return the 1-based index of the element if found; -1 otherwise.
+     * @return the int position of where it is located within the stack.
+     *          It also returns -1 if the value is not found.
      */
     public int search(E obj);
 
     /**
-     * Determine whether the queue contains the specified element.
+     * Method to determine if a specific value exists within the stack.
      *
-     * Precondition: Queue exists.
-     * Postcondition: Returns true if element exists in queue; false otherwise.
+     * Precondition: A stack must already be present.
      *
-     * @param obj the element to test for membership
-     * @return true if the element exists in the queue; false otherwise.
-     * @throws NullPointerException if {@code obj} is null.
+     * Postcondition: Determine if a value exists or not.
+     *
+     * @param obj: the specific value to searched for to determine whether or not it exists within the stack.
+     * @return True if the value exists within the stack. False if it does not.
      */
     public boolean contains(E obj);
 
     /**
-     * Determine whether the queue is empty.
+     * Method to check if the stack is empty or not.
      *
-     * Precondition: None.
-     * Postcondition: Returns true if queue has no elements; false otherwise.
+     * Precondition: None
      *
-     * @return true if queue is empty; false otherwise.
+     * Postcondition: Determine if the stack is empty or not.
+     *
+     * @return True if the stack is empty. False if not.
      */
     public boolean isEmpty();
 
     /**
-     * Determine whether the queue is full. For this assignment implementations
-     * are expected to return false (unbounded) but this method is provided for
-     * completeness/compatibility with tests.
+     * Method to clear the entire stack of all its contents.
      *
-     * Precondition: None.
-     * Postcondition: Returns true if queue is at capacity; false otherwise.
+     * Precondition: None
      *
-     * @return true if queue is full; false otherwise.
+     * Postcondition: The stack is now empty without any values within the stack.
      */
-    public boolean isFull();
-
-    /**
-     * Return an iterator to iterate over the items of the queue from head to tail.
-     *
-     * Precondition: Queue exists.
-     * Postcondition: An iterator positioned before the head element is returned.
-     *
-     * @return an iterator over the queue elements (head -> tail).
-     */
-    public Iterator<E> iterator();
+    public void clear();
 }
