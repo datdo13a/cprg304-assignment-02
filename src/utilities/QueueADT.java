@@ -15,143 +15,132 @@ import implementations.Iterator;
 
 public interface QueueADT<E> {
 	/**
-     * Enqueue (add) an element to the tail (end) of the queue.
+     * enqueue (add) an element to the tail (end) of the queue
      *
-     * Precondition: A queue instance must exist.
-     * Postcondition: The element is added to the tail; size increases by one.
+     * Precondition: queue instance must exist
+     * Postcondition: element is added to the tail; size increases by one
      *
      * @param obj the element to add
-     * @throws NullPointerException if {@code obj} is null.
+     * @throws NullPointerException if {@code obj} is null
      */
-    public void enqueue(E obj);
+    public void enqueue(E obj) throws NullPointerException;
 
     /**
-     * Dequeue (remove) and return the element at the head (front) of the queue.
+     * dequeue (remove) and return the element at the head (front) of the queue
      *
-     * Precondition: The queue contains at least one element.
-     * Postcondition: The head element is removed; size decreases by one.
+     * Precondition: queue needs at least one element
+     * Postcondition: head element is removed; size decreases by one
      *
-     * @return the element removed from the head of the queue.
-     * @throws EmptyQueueException if the queue is empty.
+     * @return the element removed from the head of the queue
+     * @throws EmptyQueueException if the queue is empty
      */
-    public E dequeue() throws EmptyQueueException;
+    public E dequeue() throws EmptyQueueException, NullPointerException;
 
     /**
-     * Remove all elements from the queue.
+     * remove all elements from the queue
      *
-     * Precondition: A queue instance exists.
-     * Postcondition: The queue becomes empty and size is zero.
+     * Precondition: queue instance exists
+     * Postcondition: queue becomes empty and size is zero
      */
     public void dequeueAll();
 
     /**
-     * Peek (inspect) the element at the head of the queue without removing it.
+     * peek (inspect) the element at the head of the queue without removing it
      *
-     * Precondition: The queue contains at least one element.
-     * Postcondition: The head element is returned; queue unchanged.
+     * Precondition: queue contains at least one element
+     * Postcondition: head element is returned; queue unchanged
      *
-     * @return the element at the head of the queue.
-     * @throws EmptyQueueException if the queue is empty.
+     * @return the element at the head of the queue
+     * @throws EmptyQueueException if the queue is empty
      */
     public E peek() throws EmptyQueueException;
 
     /**
-     * Return the number of elements in the queue.
+     * return the number of elements in the queue
      *
-     * Precondition: None.
-     * Postcondition: The number of elements is returned.
+     * Postcondition: The number of elements is returned
      *
      * @return the size of the queue.
      */
     public int size();
 
     /**
-     * Compare this queue to another queue to determine if they contain the same
-     * elements in the same order.
-     *
-     * Precondition: Two queues are available to be compared.
-     * Postcondition: A boolean result indicating equality is returned.
+     * is this queue to another queue to determine if they contain the same elements in the same order\
+     * 
+     * Precondition: two queues are available to be compared
+     * Postcondition: boolean result indicating equality is returned
      *
      * @param otherQueue the other queue to compare to.
-     * @return true if queues contain identical elements in the same order; false otherwise.
+     * @return true if queues contain identical elements in the same order; false otherwise
      */
     public boolean equals(QueueADT<E> otherQueue);
 
     /**
-     * Convert the queue contents to an Object array from head to tail.
+     * convert the queue contents to an Object array from head to tai.
      *
-     * Precondition: Queue exists.
-     * Postcondition: An Object[] containing queue contents (head->tail) is returned.
+     * Precondition: queue exists
+     * Postcondition: An Object[] containing queue contents (head->tail) is returned
      *
      * @return an Object[] of all queue elements (head first).
      */
     public Object[] toArray();
 
     /**
-     * Convert the queue contents to an array of type E. If the provided array
-     * has sufficient length it is filled and returned; otherwise a new array
-     * of the same runtime type is created and returned.
+     * convert the queue contents to an array of type E
      *
-     * Precondition: Queue exists and the array parameter is non-null.
-     * Postcondition: An array containing queue contents (head->tail) is returned.
+     * Precondition: array parameter is non-null.
+     * Postcondition: An array containing queue contents (head->tail) is returned
      *
      * @param arr the array into which the elements of the queue are to be stored
      * @return an array containing the elements of the queue
      * @throws NullPointerException if {@code arr} is null.
      */
-    public E[] toArray(E[] arr);
+    public E[] toArray(E[] arr) throws NullPointerException;
 
     /**
      * Search for the given element and return its 1-based position in the queue
-     * (head is position 1). Return -1 if not found.
+     * (head is position 1) Return -1 if not found.
      *
-     * Precondition: Queue exists.
-     * Postcondition: Index (1-based) of the first matching element is returned, or -1.
+     * Postcondition: Index (1-based) of the first matching element is returned, or -1
      *
      * @param obj the element to search for
-     * @return the 1-based index of the element if found; -1 otherwise.
+     * @return the 1-based index of the element if found; -1 otherwise
      */
     public int search(E obj);
 
     /**
-     * Determine whether the queue contains the specified element.
+     * whether the queue contains the specified element
      *
-     * Precondition: Queue exists.
-     * Postcondition: Returns true if element exists in queue; false otherwise.
+     * Postcondition: returns true if element exists in queue
      *
      * @param obj the element to test for membership
-     * @return true if the element exists in the queue; false otherwise.
-     * @throws NullPointerException if {@code obj} is null.
+     * @return true if the element exists in the queue; false otherwise
+     * @throws NullPointerException if {@code obj} is null
      */
     public boolean contains(E obj);
 
     /**
-     * Determine whether the queue is empty.
+     * whether the queue is empty.
      *
-     * Precondition: None.
-     * Postcondition: Returns true if queue has no elements; false otherwise.
+     * Postcondition: returns true if queue has no elements
      *
-     * @return true if queue is empty; false otherwise.
+     * @return true if queue is empty
      */
     public boolean isEmpty();
 
     /**
-     * Determine whether the queue is full. For this assignment implementations
-     * are expected to return false (unbounded) but this method is provided for
-     * completeness/compatibility with tests.
+     * whether the queue is full
      *
-     * Precondition: None.
-     * Postcondition: Returns true if queue is at capacity; false otherwise.
+     * Postcondition: returns true if queue is at capacity
      *
-     * @return true if queue is full; false otherwise.
+     * @return true if queue is full
      */
     public boolean isFull();
 
     /**
-     * Return an iterator to iterate over the items of the queue from head to tail.
+     * returns an iterator to iterate over the items of the queue from head to tail
      *
-     * Precondition: Queue exists.
-     * Postcondition: An iterator positioned before the head element is returned.
+     * Postcondition: an iterator positioned before the head element is returned.
      *
      * @return an iterator over the queue elements (head -> tail).
      */
