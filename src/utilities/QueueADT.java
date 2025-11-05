@@ -3,16 +3,13 @@ import exceptions.EmptyQueueException;
 import implementations.Iterator;
 
 /**
+ * first in first out.
+ * used as a basis for the queue structure that we will implement for part2
+ *
  * @author Dat, Airzy, Eric
  * @version 1.1
- *
- * <p>
- *     The <code>QueueADT</code> class is designed to be used as a basis for the queue structure that will be developed and implemented for CPRG304-Assignment2 Part-2.
- * </p>
- *
  * @param <E> object type held in the queue.
  */
-
 public interface QueueADT<E> {
 	/**
      * enqueue (add) an element to the tail (end) of the queue
@@ -73,7 +70,7 @@ public interface QueueADT<E> {
      * @param otherQueue the other queue to compare to.
      * @return true if queues contain identical elements in the same order; false otherwise
      */
-    public boolean equals(QueueADT<E> otherQueue);
+    public boolean isEquals(QueueADT<E> otherQueue);
 
     /**
      * convert the queue contents to an Object array from head to tai.

@@ -2,16 +2,13 @@ package utilities;
 import java.util.NoSuchElementException;
 
 /**
+ * last in first out.
+ * used as a basis for the stack structure that we will implement for part 2
+ *
  * @author Dat, Airzy, Eric
  * @version 1.1
- *
- * <p>
- *     The <code>StackADT</code> class is designed to be used as a basis for the stack structure that will be developed and implemented for CPRG304-Assignment2 Part-2.
- * </p>
- *
  * @param <E> The object that is held in the stack.
  */
-
 public interface StackADT<E> {
 
     /**
@@ -57,6 +54,7 @@ public interface StackADT<E> {
      * Precondition: None
      *
      * Postcondition: The size and the number of values inside the stack is determined.
+     * @return size of the stack
      */
     public int size();
 
