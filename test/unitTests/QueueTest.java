@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exceptions.EmptyQueueException;
-import utilities.Iterator;
+import implementations.Iterator;
 import implementations.MyQueue;
 
 /**
