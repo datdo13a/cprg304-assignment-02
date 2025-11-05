@@ -31,7 +31,7 @@ public interface QueueADT<E> {
      * @return the element removed from the head of the queue
      * @throws EmptyQueueException if the queue is empty
      */
-    public E dequeue() throws EmptyQueueException, NullPointerException;
+    public E dequeue() throws EmptyQueueException;
 
     /**
      * remove all elements from the queue
@@ -114,7 +114,7 @@ public interface QueueADT<E> {
      * @return true if the element exists in the queue; false otherwise
      * @throws NullPointerException if {@code obj} is null
      */
-    public boolean contains(E obj);
+    public boolean contains(E obj) throws NullPointerException;
 
     /**
      * whether the queue is empty.
