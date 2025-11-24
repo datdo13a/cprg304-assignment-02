@@ -1,5 +1,8 @@
 package implementations;
 
-public class Iterator {
+import utilities.IteratorADT;
 
+import java.util.NoSuchElementException;
+
+public class Iterator {
 }

@@ -1,6 +1,5 @@
 package utilities;
 import exceptions.EmptyQueueException;
-import utilities.Iterator;
 
 /**
  * first in first out.
@@ -141,5 +140,5 @@ public interface QueueADT<E> {
      *
      * @return an iterator over the queue elements (head -> tail).
      */
-    public Iterator<E> iterator();
+    public IteratorADT<E> iterator();
 }
