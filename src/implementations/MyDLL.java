@@ -55,6 +55,9 @@ public class MyDLL<E>
 	    if (index < 0 || index > size) {
 	        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 	    }
+	    if (item == null) {
+	    	throw new NullPointerException("item is null");
+	    }
 	    
 	    if (index == 0) {
 	        addFirst(item); // insert at head
@@ -83,7 +86,7 @@ public class MyDLL<E>
 	
 	public boolean add(E item) {
 	    if (item == null) {
-	        throw new NullPointerException("Null elements not allowed");
+	        throw new NullPointerException("item is null");
 	    }
 	    addLast(item);
 	    return true;
@@ -97,7 +100,7 @@ public class MyDLL<E>
 	 */
 	public boolean addAll(MyArrayList<E> otherList) {
 	    if (otherList == null) {
-	        throw new NullPointerException("Input list cannot be null");
+	        throw new NullPointerException("input list cannot be null");
 	    }
 
 	    boolean modified = false;
@@ -105,7 +108,7 @@ public class MyDLL<E>
 	    for (int i = 0; i < otherList.size(); i++) {
 	        E item = otherList.get(i);
 	        if (item == null) {
-	            throw new NullPointerException("Null elements not allowed");
+	            throw new NullPointerException("element cant be null");
 	        }
 	        add(item);
 	        modified = true;
@@ -123,7 +126,7 @@ public class MyDLL<E>
 	 */
 	public boolean addAll(MyDLL<E> list) {
 	    if (list == null) {
-	        throw new NullPointerException("Input list cannot be null");
+	        throw new NullPointerException("input list cannot be null");
 	    }
 
 	    boolean modified = false;
@@ -132,7 +135,7 @@ public class MyDLL<E>
 	    while (current != null) {
 	        E item = current.getElement();
 	        if (item == null) {
-	            throw new NullPointerException("Null elements not allowed");
+	            throw new NullPointerException("element cant be null");
 	        }
 	        add(item);
 	        modified = true;
@@ -142,6 +145,7 @@ public class MyDLL<E>
 	    return modified;
 	}
 
+	// bro addAll(null) is IMPOSIBLE to pass?!!!
 	
 	/**
 	 * returns element at the specified position in the list.
@@ -232,44 +236,85 @@ public class MyDLL<E>
 		}
 	}
 	
+
 	/**
-	 * remove the element at index from the list.
-	 * @param index of the element to remove
-	 * @return the removed element, or null if the list is empty
-	 * @throws IndexOutOfBoundsException if index < 0 or >= size
+	 * removes the first occurrence of the specified element from the list
+	 * @param item element to remove
+	 * @return the removed element, or null if not found
+	 * @throws NullPointerException if item is null
 	 */
+	public E remove(E item) {
+	    if (item == null) {
+	        throw new NullPointerException("Null elements not allowed");
+	    }
+
+	    MyDLLNode<E> current = head;
+
+	    while (current != null) {
+	        if (current.getElement().equals(item)) {
+	            E removed = current.getElement();
+
+	            MyDLLNode<E> prevNode = current.getPrev();
+	            MyDLLNode<E> nextNode = current.getNext();
+
+	            if (prevNode != null) {
+	                prevNode.setNext(nextNode);
+	            } else {
+	                head = nextNode; // removed head
+	            }
+
+	            if (nextNode != null) {
+	                nextNode.setPrev(prevNode);
+	            } else {
+	                tail = prevNode; // removed tail
+	            }
+
+	            current.setNext(null);
+	            current.setPrev(null);
+
+	            size--;
+	            return removed; // return the removed element
+	        }
+	        current = current.getNext();
+	    }
+
+	    return null; // not found
+	}
+	
+	// other way that takes in index
 	public E remove(int index) {
 	    if (index < 0 || index >= size) {
 	        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
 	    }
 
 	    if (index == 0) {
-	        return removeFirst(); // remove head
+	        return removeFirst();
 	    } else if (index == size - 1) {
-	        return removeLast(); // remove tail
+	        return removeLast();
 	    } else {
-	        // remove in middle
 	        MyDLLNode<E> current = head;
 	        for (int i = 0; i < index; i++) {
 	            current = current.getNext();
 	        }
 
-	        E returnValue = current.getElement();
+	        E removed = current.getElement();
 	        MyDLLNode<E> prevNode = current.getPrev();
 	        MyDLLNode<E> nextNode = current.getNext();
 
 	        prevNode.setNext(nextNode);
 	        nextNode.setPrev(prevNode);
 
-	        // disconnect the removed node
 	        current.setNext(null);
 	        current.setPrev(null);
 
 	        size--;
-	        return returnValue;
+	        return removed;
 	    }
 	}
 
+
+	
+	
 	/**
 	 * replace the element at the given index.
 	 * @param index position to replace (0-based)
@@ -414,18 +459,18 @@ public class MyDLL<E>
 	    private MyDLLNode<E> current;
 
 	    public DLLIterator() {
-	        super(null);
+	        super(new MyArrayList<>()); // pass an empty dummy list so super() doesn't throw
 	        this.current = head;
 	    }
 
 	    @Override
 	    public boolean hasNext() {
-	        return current != null;
+	        return current != null; // use DLL's current, ignore parent list
 	    }
 
 	    @Override
 	    public E next() {
-	        if (!hasNext()) {
+	        if (current == null) {
 	            throw new NoSuchElementException();
 	        }
 	        E data = current.getElement();
