@@ -171,7 +171,7 @@ public class MyQueue<E> implements QueueADT<E>{
 	}
 
 	@Override
-	public implementations.Iterator<E> iterator() {
-		return new implementations.Iterator<E>(elementArr);
+	public Iterator<E> iterator() {
+		return new Iterator<E>(elementArr);
 	}
 }
