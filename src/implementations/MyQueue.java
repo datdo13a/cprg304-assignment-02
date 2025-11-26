@@ -4,178 +4,142 @@ import exceptions.EmptyQueueException;
 import utilities.QueueADT;
 import implementations.Iterator;
 
-public class MyQueue<E> implements QueueADT<E>{
-	private MyArrayList<E> elementArr;
-	
-	/**
-	 * constructor
-	 */
-	public MyQueue() {
-		this.elementArr = new MyArrayList<E>();
-	}
+public class MyQueue<E> implements QueueADT<E> {
+    private MyDLL<E> elementList;
 
-	/**
-	 * adds an object to the list
-	 * @param object to add
-	 */
-	public void enqueue(E obj) throws NullPointerException {
-		if(obj == null) {
-			throw new NullPointerException("Must not be a null element to enqueue into the queue");
-		}
-		elementArr.add(obj);	
-	}
+    public MyQueue() {
+        this.elementList = new MyDLL<>();
+    }
 
-	/**
-	 * removes the head object from the list
-	 * @return object that was removed
-	 */
-	public E dequeue() throws EmptyQueueException {
-		if(elementArr.isEmpty()) {
-			throw new EmptyQueueException();// TODO emty queue exception needs to be finished
-		}
-		E dequeuedItem = (E) elementArr.remove(0);
-		return dequeuedItem;
-	}
-
-	/**
-	 * clears the queue entirely
-	 */
-	public void dequeueAll() {
-		elementArr.clear();
-	}
-
-	/**
-	 * returns the head object without removing it
-	 */
-	public E peek() throws EmptyQueueException {
-		if(elementArr.isEmpty()) {
-			throw new EmptyQueueException();// TODO emty queue exception needs to be finished
-		}
-		return elementArr.get(0);
-	}
-
-	/**
-	 * returns the queues size
-	 */
-	public int size() {
-		return elementArr.size();
-	}
-
-	/**
-	 * checks to see if two queues are the same
-	 */
-	public boolean equals(QueueADT<E> otherQueue) {
-		if (this == otherQueue) return true;  // same ref
-	    if (otherQueue == null) return false; // null check
-
-	    QueueADT<?> other = (QueueADT<?>) otherQueue;
-
-	    if (this.size() != other.size()) return false;
-
-	    Object[] a = this.toArray();
-	    Object[] b = other.toArray();
-
-	    for (int i = 0; i < a.length; i++) {
-	        if (a[i] == null) {
-	            if (b[i] != null) return false;
-	        } else {
-	            if (!a[i].equals(b[i])) return false;
-	        }
-	    }
-	    return true;
-	}
-
-	/**
-	 * returns the queue as an array
-	 */
-	public Object[] toArray() {
-		return elementArr.toArray();
-	}
-
-	/**
-	 * creates an array within a certain parameter
-	 * @param arr as the holder
-	 * @return the array into which the elements of this queue are to be
-     * stored, if it is big enough; otherwise, a new array of the same
-     * runtime type is allocated for this purpose.
-     * @throws NullPointerException
-	 */
-	public E[] toArray(E[] arr) throws NullPointerException {
-		if(arr == null) {
-			throw new NullPointerException("The holder element must not be null");
-		}
-		if (arr.length < elementArr.size()) {
-            // if the array size is too small
-			E[] newArray = (E[]) java.util.Arrays.copyOf(arr, elementArr.size());
-            for (int i = 0; i < elementArr.size(); i++) {
-                newArray[i] = elementArr.get(i);
-            }
-            return (E[]) newArray;
+    /**
+     * add to the end
+     */
+    public void enqueue(E obj) {
+        if (obj == null) {
+            throw new NullPointerException("Must not be a null element to enqueue");
         }
-        else {
-            // if the array is the same or bigger in size (if it is bigger, create null elements after)
-            for (int i = 0; i < elementArr.size(); i++) {
-                arr[i] = (E) elementArr.get(i);
-            }
-            if (arr.length > elementArr.size()) {
-                arr[elementArr.size()] = null;
-            }
-            return arr;
+        elementList.add(obj); // add to the end
+    }
+
+    /**
+     * removes the head object from the queue
+     * @return E the removed element
+     */
+    public E dequeue() throws EmptyQueueException {
+        if (elementList.isEmpty()) {
+            throw new EmptyQueueException();
         }
-	}
+        return elementList.removeFirst(); // remove from front
+    }
 
-	/**
-	 * returns the 1-based index of the element from the queue front. -1 if none found.
-	 *
-	 * @param obj to search for
-	 * @return 1-based index from the front, or -1 not found
-	 * @throws NullPointerException if arg obj is null
-	 */
-	public int search(E obj) {
-	    if (obj == null) {
-	        throw new NullPointerException("Must not be a null element");
-	    }
-	    int sz = elementArr.size();
-	    for (int i = 0; i < sz; i++) {
-	        if (obj.equals(elementArr.get(i))) {
-	            return i + 1; // +1 cuz from head of the que
-	        }
-	    }
-	    return -1; // not found
-	}
+    /**
+     * clears the queue
+     */
+    public void dequeueAll() {
+        elementList.clear();
+    }
 
+    /**
+     * returns the head object without removing it
+     * @return E head
+     */
+    public E peek() throws EmptyQueueException {
+        if (elementList.isEmpty()) {
+            throw new EmptyQueueException();
+        }
+        return elementList.get(0);
+    }
 
-	/**
-	 * returns if a specified object is found in the queue
-	 * @param obj the object you want to search the position for
-	 * @return
-	 */
-	public boolean contains(E obj) throws NullPointerException {
-		if(obj == null) {
-			throw new NullPointerException("Must not be a null element");
-		}
-		for ( int i = elementArr.size() - 1; i >= 0; i--) {
-            if (obj.equals(elementArr.get(i))) {
-                return true;
+    /**
+     * returns the queue size
+     * @return size of queue, #of stuff in list
+     */
+    public int size() {
+        return elementList.size();
+    }
+
+    /**
+     * checks if two queues are equal
+     * @return if queues are equal
+     */
+    public boolean equals(QueueADT<E> otherQueue) {
+        if (this == otherQueue) return true;
+        if (otherQueue == null) return false;
+
+        Object[] a = this.toArray();
+        Object[] b = otherQueue.toArray();
+
+        if (a.length != b.length) return false;
+
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == null) {
+                if (b[i] != null) return false;
+            } else if (!a[i].equals(b[i])) {
+                return false;
             }
         }
-		return false;
-	}
+        return true;
+    }
 
-	public boolean isEmpty() {
-		if(elementArr.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * @return elements in the queue as array
+     */
+    public Object[] toArray() {
+        return elementList.toArray();
+    }
 
-	@Override
-	public boolean isFull() {
-		return false;//TODO i dont know what to do with this
-	}
+    /**
+     * @return the queue as an array using a provided holder
+     */
+    public E[] toArray(E[] arr) {
+        return elementList.toArray(arr);
+    }
 
-	@Override
-	public Iterator<E> iterator() {
-		return new Iterator<E>(elementArr);
-	}
+    /**
+     * @return the index of the element from the queue front, -1 if not found
+     */
+    public int search(E obj) {
+        if (obj == null) {
+            throw new NullPointerException("Must not be a null element");
+        }
+        for (int i = 0; i < elementList.size(); i++) {
+            if (obj.equals(elementList.get(i))) {
+                return i + 1; // 1-based index
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * @return if a specified object is found in the queue
+     */
+    public boolean contains(E obj) {
+        if (obj == null) {
+            throw new NullPointerException("Must not be a null element");
+        }
+        return elementList.contains(obj);
+    }
+
+    /**
+     * @return if queue is empty
+     */
+    public boolean isEmpty() {
+        return elementList.isEmpty();
+    }
+
+    @Override
+    /**
+     * @return this is never full??
+     */
+    public boolean isFull() {
+        return false;
+    }
+
+    @Override
+	/**
+	 * @return the iterator
+	 */
+    public Iterator<E> iterator() {
+        return elementList.iterator(); // use DLL's iterator
+    }
 }
