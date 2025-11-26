@@ -16,6 +16,11 @@ public class Parser {
 		
 	}
 	
+	/**
+	 * private function to extract tags from a line, used in the parser
+	 * @param line
+	 * @return tags, arraylist of tagEntries
+	 */
 	static MyArrayList<String> extractTags(String line) {
 		MyArrayList<String> tags = new MyArrayList<String>();
 		int i = 0;
@@ -32,6 +37,11 @@ public class Parser {
 		return tags;
 	}
 	
+	/**
+	 * reads from xml file and returns a list of the tags
+	 * @param filepath file to read from
+	 * @return allTags, arraylist of tagEntries
+	 */
 	private MyArrayList<TagEntry> readFilePath(String filepath) {
 		MyArrayList<TagEntry> allTags = new MyArrayList<>();
 		try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
@@ -57,29 +67,12 @@ public class Parser {
 		return allTags;
 	}
 	
-	public void parse(String filepath) throws EmptyQueueException {
-		System.out.println("Filepath: " + filepath);
-		MyArrayList<TagEntry> allTags = readFilePath(filepath);
-
-		// for debugging
-		/*
-		 * for (int i = 0; i < allTags.size(); i++) { TagEntry te = allTags.get(i);
-		 * System.out.println("LINE " + te.line + " = " + te.tag);
-		 * 
-		 * if (te.isStartTag()) { System.out.println("   isStartTag = true"); }
-		 * 
-		 * if (te.isEndTag()) { System.out.println("     isEndTag = true"); }
-		 * 
-		 * if (te.isSelfClosing()) { System.out.println(" isSelfClosing = true"); }
-		 * 
-		 * if (te.isStartTag() || te.isEndTag() || te.isSelfClosing()) {
-		 * System.out.println("      tagName = " + te.getTagName()); }
-		 * 
-		 * System.out.println(); }
-		 */
-
-		//
-
+	/**
+	 * this basicly the part in the kittyparser example
+	 * @param allTags
+	 * @throws EmptyQueueException
+	 */
+	private void startParser(MyArrayList<TagEntry> allTags) throws EmptyQueueException {
 		MyStack<TagEntry> readingStack = new MyStack<TagEntry>();
 		MyQueue<TagEntry> errorQ = new MyQueue<TagEntry>();
 		MyQueue<TagEntry> extrasQ = new MyQueue<TagEntry>();
@@ -185,6 +178,37 @@ public class Parser {
 						"Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
 			}
 
+		}
+	}
+	
+	public void parse(String filepath) {
+		System.out.println("Filepath: " + filepath);
+		MyArrayList<TagEntry> allTags = readFilePath(filepath);
+
+		// for debugging
+		/*
+		 * for (int i = 0; i < allTags.size(); i++) { TagEntry te = allTags.get(i);
+		 * System.out.println("LINE " + te.line + " = " + te.tag);
+		 * 
+		 * if (te.isStartTag()) { System.out.println("   isStartTag = true"); }
+		 * 
+		 * if (te.isEndTag()) { System.out.println("     isEndTag = true"); }
+		 * 
+		 * if (te.isSelfClosing()) { System.out.println(" isSelfClosing = true"); }
+		 * 
+		 * if (te.isStartTag() || te.isEndTag() || te.isSelfClosing()) {
+		 * System.out.println("      tagName = " + te.getTagName()); }
+		 * 
+		 * System.out.println(); }
+		 */
+
+		//
+
+		try {
+			startParser(allTags);
+		} catch (EmptyQueueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

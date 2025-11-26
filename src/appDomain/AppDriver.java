@@ -1,7 +1,5 @@
 package appDomain;
 
-import exceptions.EmptyQueueException;
-
 public class AppDriver {
 
 	// example arg: ./res/sample1.xml or ./res/sample2.xml
@@ -17,12 +15,7 @@ public class AppDriver {
 
 		String filepath = args[0];
 		Parser xmlParser = new Parser();
-		try { // todo maybe move this try catch inside the parser
-			xmlParser.parse(filepath);
-		} catch (EmptyQueueException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		xmlParser.parse(filepath);
 	}
 }
 

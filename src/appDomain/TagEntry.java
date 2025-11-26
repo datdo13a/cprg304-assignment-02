@@ -1,5 +1,6 @@
 package appDomain;
 
+// literally just used to store tag:string and line:number
 public class TagEntry {
 	String tag;
 	int line;
