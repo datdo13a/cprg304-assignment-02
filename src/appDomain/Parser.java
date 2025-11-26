@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import implementations.Iterator;
 import implementations.MyArrayList;
 import implementations.MyQueue;
 import implementations.MyStack;
@@ -67,6 +68,25 @@ public class Parser {
 		return allTags;
 	}
 	
+	// build in insertion sort lol
+	private TagEntry[] insertionSortByLine(TagEntry[] arr) {
+	    if (arr == null) return null;
+	    int n = arr.length;
+	    for (int i = 1; i < n; i++) {
+	        TagEntry key = arr[i];
+	        int j = i - 1;
+	        
+	        //
+	        while (j >= 0 && arr[j].line > key.line) {
+	            arr[j + 1] = arr[j];
+	            j--;
+	        }
+	        arr[j + 1] = key;
+	    }
+	    return arr;
+	}
+
+	
 	/**
 	 * this basicly the part in the kittyparser example
 	 * @param allTags
@@ -79,6 +99,8 @@ public class Parser {
 
 		// basicly the kitty parser template
 		// TODO needs bit more work
+	
+		MyStack<TagEntry> errors = new MyStack<TagEntry>();
 		for (int i = 0; i < allTags.size(); i++) {
 			TagEntry te = allTags.get(i);
 			if (te.isSelfClosing()) { // if self closing tag
@@ -148,7 +170,7 @@ public class Parser {
 			}
 
 			// uhh
-
+			
 			// If both queues are not empty, peek both queues
 			while (!errorQ.isEmpty() && !extrasQ.isEmpty()) {
 
@@ -160,24 +182,42 @@ public class Parser {
 					extrasQ.dequeue();
 				} else {
 					TagEntry reported = errorQ.dequeue();
-					System.out.println(
-							"Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
+					errors.push(reported);
+					//System.out.println("Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
 				}
 			}
 
 			// Repeat until both queues are empty
 			while (!errorQ.isEmpty()) {
 				TagEntry reported = errorQ.dequeue();
-				System.out.println(
-						"Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
+				//System.out.println("Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
 			}
 
 			while (!extrasQ.isEmpty()) {
 				TagEntry reported = extrasQ.dequeue();
-				System.out.println(
-						"Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
+				errors.push(reported);
+				//System.out.println("Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
 			}
+		}
+		
+		if (errors.size() == 0) {
+			System.out.println("XML document is constructed correctly.");
+		} else {
+		    Object[] objArr = errors.toArray();
+		    int n = objArr.length;
 
+		    // cast to TagEntry[]
+		    TagEntry[] arr = new TagEntry[n];
+		    for (int i = 0; i < n; i++) {
+		        arr[i] = (TagEntry) objArr[i];
+		    }
+		    
+		    insertionSortByLine(arr);
+
+		    for (int i = 0; i < n; i++) {
+		        TagEntry e = arr[i];
+		        System.out.println("Error at line: " + e.line + " " + e.tag + " is not constructed correctly.");
+		    }
 		}
 	}
 	
