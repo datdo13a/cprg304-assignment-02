@@ -4,6 +4,11 @@ import exceptions.EmptyQueueException;
 import utilities.QueueADT;
 import implementations.Iterator;
 
+/**
+ * Implementing a queue that is based on MyDLL.java
+ * @param <E> the type of element within this Queue
+ */
+
 public class MyQueue<E> implements QueueADT<E> {
     private MyDLL<E> elementList;
 
