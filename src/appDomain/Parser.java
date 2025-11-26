@@ -165,6 +165,9 @@ public class Parser {
 					// Add E to extrasQ
 					extrasQ.enqueue(te);
 					
+					// hacky?? and not part of the algo.. but works... TODO TEST
+					reportsList.add(te);
+					
 					// put stuff back to reading stack
 					while (!temp.isEmpty()) {
 						readingStack.push(temp.pop());
@@ -204,7 +207,7 @@ public class Parser {
 				} else { // If they don’t match, dequeue from errorQ and report as error 
 					TagEntry reported = errorQ.dequeue();
 					//System.out.println(te.equals(x) + " " + e.equals(reported));
-					reportsList.add(reported); // uhhhhg (TODO) how to make this part report </I> closing tag instead of <i>
+					reportsList.add(reported);
 				}
 			}
 
@@ -225,7 +228,7 @@ public class Parser {
 	 * @param filepath
 	 */
 	public void parse(String filepath) {
-		System.out.println("Filepath: " + filepath);
+		//System.out.println("Filepath: " + filepath);
 		MyArrayList<TagEntry> allTags = readFilePath(filepath);
 
 		// for debugging
