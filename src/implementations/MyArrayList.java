@@ -1,6 +1,6 @@
 package implementations;
 
-import java.util.Arrays;
+import java.util.Arrays; // only used for the exceptions of Arrays.copyOf() or System.arraycopy()
 import utilities.ListADT;
 import implementations.Iterator;
 
@@ -16,6 +16,7 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @SuppressWarnings("unchecked")
+    // helper for resizing it
     private void resize(int newCapacity) {
         Object[] newArray = new Object[newCapacity];
         for (int i = 0; i < size; i++) {
@@ -24,12 +25,19 @@ public class MyArrayList<E> implements ListADT<E> {
         elementArr = (E[]) newArray;
     }
 
+    
     @Override
+    /**
+     * @return size of the arraylist
+     */
     public int size() {
         return size;
     }
 
     @Override
+    /**
+     * clears the arraylist
+     */
     public void clear() {
         int arrCapacity = elementArr.length;
         for (int i = 0; i < arrCapacity; i++) {
@@ -39,6 +47,14 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * adds element on the given index
+     * @param index index to add
+     * @param toAdd element to add
+     * @return true if added
+     * @throws NullPointerException if toAdd is null
+     * @throws IndexOutOfBoundsException if the index is negative or greater than the current size
+     */
     public boolean add(int index, E toAdd) throws NullPointerException, IndexOutOfBoundsException {
         if (index > size) {
             throw new IndexOutOfBoundsException("index biger than size");
@@ -65,6 +81,12 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * adds element to the end of the list
+     * @param toAdd the element to add
+     * @return true if the element was added successfully
+     * @throws NullPointerException if toAdd is null
+     */
     public boolean add(E toAdd) throws NullPointerException {
         if (toAdd == null) {
             throw new NullPointerException("toAdd is null bro");
@@ -79,6 +101,12 @@ public class MyArrayList<E> implements ListADT<E> {
 
     @SuppressWarnings("unchecked")
     @Override
+    /**
+     * adds all elements from another ListADT to this list.
+     * @param toAdd the list of elements to add
+     * @return true if at least one element was added
+     * @throws NullPointerException if toAdd is null or contains null elements
+     */
     public boolean addAll(ListADT<? extends E> toAdd) throws NullPointerException {
         if (toAdd == null) {
             throw new NullPointerException("toAdd is null bro");
@@ -124,6 +152,12 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * returns element at specified index
+     * @param index the position of the element
+     * @return the element at the specified index
+     * @throws IndexOutOfBoundsException if the index is negative or greater than or equal to size
+     */
     public E get(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("index out of bounds");
@@ -132,6 +166,12 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * removes and returns the element at specified index
+     * @param index the position of the element to remove
+     * @return the removed element
+     * @throws IndexOutOfBoundsException if the index is negative or greater than or equal to size
+     */
     public E remove(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("index out of bounds");
@@ -147,6 +187,12 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * removes the specified element
+     * @param toRemove the element to remove
+     * @return the removed element, or null if not found
+     * @throws NullPointerException if toRemove is null
+     */
     public E remove(E toRemove) throws NullPointerException {
         if (toRemove == null) {
             throw new NullPointerException("toRemove is null");
@@ -160,6 +206,14 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * replaces element at given index with given element
+     * @param index the position of the element to replace
+     * @param toChange the new element
+     * @return the element previously at the specified position
+     * @throws NullPointerException if toChange is null
+     * @throws IndexOutOfBoundsException if the index is invalid
+     */
     public E set(int index, E toChange) throws NullPointerException, IndexOutOfBoundsException {
         if (toChange == null) {
             throw new NullPointerException("toChange is null");
@@ -173,11 +227,21 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * if the list is empty
+     * @return true if the list is empty
+     */
     public boolean isEmpty() {
         return size == 0;
     }
 
     @Override
+    /**
+     * if the list contains the specified element
+     * @param toFind the element to search for
+     * @return true if the element exists in the list
+     * @throws NullPointerException if toFind is null
+     */
     public boolean contains(E toFind) throws NullPointerException {
         if (toFind == null) {
             throw new NullPointerException("toFind is null");
@@ -192,6 +256,12 @@ public class MyArrayList<E> implements ListADT<E> {
 
     @SuppressWarnings("unchecked")
     @Override
+    /**
+     * copies elements into the provided array, resizes if needs to fit
+     * @param toHold the array to store elements
+     * @return the array containing the list elements
+     * @throws NullPointerException if toHold is null
+     */
     public E[] toArray(E[] toHold) throws NullPointerException {
         if (toHold == null) {
             throw new NullPointerException("toHold is null");
@@ -212,6 +282,10 @@ public class MyArrayList<E> implements ListADT<E> {
     }
 
     @Override
+    /**
+     * returns an Object array containing all elements of the list.
+     * @return an array containing all elements
+     */
     public Object[] toArray() {
         Object[] ret = new Object[size];
         for (int i = 0; i < size; i++) {
@@ -219,7 +293,13 @@ public class MyArrayList<E> implements ListADT<E> {
         }
         return ret;
     }
-    
+
+    /**
+     * adds all elements from a MyDLL list to this ArrayList
+     * @param list the MyDLL list to add elements from
+     * @return true if at least one element was added
+     * @throws NullPointerException if the list is null or somehow contains null elements
+     */
     public boolean addAll(MyDLL<E> list) throws NullPointerException {
         if (list == null) {
             throw new NullPointerException("list is null");
@@ -260,6 +340,10 @@ public class MyArrayList<E> implements ListADT<E> {
 
 
     @Override
+    /**
+     * returns an iterator over the elements in the list
+     * @return an Iterator for the list
+     */
     public Iterator<E> iterator() {
         return new Iterator<>(this);
     }

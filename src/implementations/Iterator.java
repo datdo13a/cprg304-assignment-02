@@ -14,11 +14,20 @@ public class Iterator<E> implements IteratorADT<E> {
     }
 
     @Override
+    /**
+     * if the iterator has more elements
+     * @return true if there are more elements to iterate over
+     */
     public boolean hasNext() {
         return cursor < list.size();
     }
 
     @Override
+    /**
+     * returns the next element in the iteration and advances the cursor
+     * @return the next element in the list
+     * @throws NoSuchElementException if no more elements
+     */
     public E next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
@@ -27,6 +36,4 @@ public class Iterator<E> implements IteratorADT<E> {
         cursor++;
         return list.get(lastReturned);
     }
-    
-    // TODO
 }
