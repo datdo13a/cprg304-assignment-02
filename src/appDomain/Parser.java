@@ -93,19 +93,19 @@ public class Parser {
 
 	
 	/**
-	 * this basicly the part in the kittyparser example
+	 * this  the part in the kittyparser example
 	 * @param allTags
+	 * @return list of errors
 	 * @throws EmptyQueueException
 	 */
-	private void startParser(MyArrayList<TagEntry> allTags) throws EmptyQueueException {
+	private MyArrayList<TagEntry> findErrors(MyArrayList<TagEntry> allTags) throws EmptyQueueException {
 		MyStack<TagEntry> readingStack = new MyStack<TagEntry>();
 		MyQueue<TagEntry> errorQ = new MyQueue<TagEntry>();
 		MyQueue<TagEntry> extrasQ = new MyQueue<TagEntry>();
 
 		// basicly the kitty parser template
 		// TODO needs bit more work
-	
-		MyStack<TagEntry> errorsList = new MyStack<TagEntry>();
+		MyArrayList<TagEntry> reportsList = new MyArrayList<TagEntry>();
 		for (int i = 0; i < allTags.size(); i++) {
 			TagEntry te = allTags.get(i);
 			if (te.isSelfClosing()) { // if self closing tag
@@ -154,15 +154,18 @@ public class Parser {
 
 				// stack has a match
 				if (found) {
+					// temp only holds untill match cuz the search loop break when match is found
 					// Pop each E from stack into errorQ until match, report as error 
 					while (!temp.isEmpty()) {
 						TagEntry reported = temp.pop();
 						errorQ.enqueue(reported);
-						errorsList.push(reported);
+						reportsList.add(reported);
 					}
 				} else {
 					// Add E to extrasQ
 					extrasQ.enqueue(te);
+					
+					// put stuff back to reading stack
 					while (!temp.isEmpty()) {
 						readingStack.push(temp.pop());
 					}
@@ -178,14 +181,13 @@ public class Parser {
 
 			// uhh
 			// If either queue is empty (but not both), report each E in both queues as error 
-			/*
-			while (!errorQ.isEmpty() || !extrasQ.isEmpty()) {
+			/*while (errorQ.isEmpty() || extrasQ.isEmpty()) {
 			    if (!errorQ.isEmpty() && extrasQ.isEmpty()) {
 			        TagEntry e = errorQ.dequeue();
-			        errorsList.push(e);
+			        reportsList.add(e);
 			    } else if (errorQ.isEmpty() && !extrasQ.isEmpty()) {
 			        TagEntry e = extrasQ.dequeue();
-			        errorsList.push(e);
+			        reportsList.add(e);
 			    } else {
 			        break;
 			    }
@@ -201,7 +203,8 @@ public class Parser {
 					extrasQ.dequeue();
 				} else { // If they don’t match, dequeue from errorQ and report as error 
 					TagEntry reported = errorQ.dequeue();
-					errorsList.push(reported);
+					//System.out.println(te.equals(x) + " " + e.equals(reported));
+					reportsList.add(reported); // uhhhhg (TODO) how to make this part report </I> closing tag instead of <i>
 				}
 			}
 
@@ -214,32 +217,11 @@ public class Parser {
 				extrasQ.dequeue();
 			}
 		}
-		
-		if (errorsList.size() == 0) { // yay no errors
-			System.out.println("XML document is constructed correctly.");
-		} else {
-			// this part sorts the errors by line number and displays...
-			
-		    Object[] objArr = errorsList.toArray();
-		    int n = objArr.length;
-
-		    // cast to TagEntry[]
-		    TagEntry[] arr = new TagEntry[n];
-		    for (int i = 0; i < n; i++) {
-		        arr[i] = (TagEntry) objArr[i];
-		    }
-		    
-		    insertionSortByLine(arr);
-
-		    for (int i = 0; i < n; i++) {
-		        TagEntry e = arr[i];
-		        System.out.println("Error at line: " + e.line + " " + e.tag + " is not constructed correctly.");
-		    }
-		}
+		return reportsList;
 	}
 	
 	/**
-	 * parses file into tags
+	 * parses file into tags and displays existing errors in the xml
 	 * @param filepath
 	 */
 	public void parse(String filepath) {
@@ -274,7 +256,29 @@ public class Parser {
 		//
 
 		try {
-			startParser(allTags);
+			MyArrayList<TagEntry> reportsList = findErrors(allTags);
+			
+			if (reportsList.size() == 0) { // yay no errors
+				System.out.println("XML document is constructed correctly.");
+			} else {
+				// this part sorts the errors by line number and displays...
+				
+			    Object[] objArr = reportsList.toArray();
+			    int n = objArr.length;
+
+			    // cast to TagEntry[]
+			    TagEntry[] arr = new TagEntry[n];
+			    for (int i = 0; i < n; i++) {
+			        arr[i] = (TagEntry) objArr[i];
+			    }
+			    
+			    insertionSortByLine(arr);
+
+			    for (int i = 0; i < n; i++) {
+			        TagEntry e = arr[i];
+			        System.out.println("Error at line: " + e.line + " " + e.tag + " is not constructed correctly.");
+			    }
+			}
 		} catch (EmptyQueueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
