@@ -3,9 +3,7 @@ package implementations;
 import java.util.NoSuchElementException;
 
 /**
- * Author: Eric LaPierre
- * Date: Nov 5th 2025
- * MyDList is a
+ *  * Implmentation of a dual linked list. This will be the basis for creating the Queue.
  * @param <E>
  */
 public class MyDLL<E>

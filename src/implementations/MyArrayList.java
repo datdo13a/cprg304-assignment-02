@@ -4,6 +4,10 @@ import java.util.Arrays; // only used for the exceptions of Arrays.copyOf() or S
 import utilities.ListADT;
 import implementations.Iterator;
 
+/**
+ * Implmentation of MyArrayList. This will be the basis for creating the Stack.
+ * @param <E>
+ */
 @SuppressWarnings("unused")
 public class MyArrayList<E> implements ListADT<E> {
     private int size = 0;
