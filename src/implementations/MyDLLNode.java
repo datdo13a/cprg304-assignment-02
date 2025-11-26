@@ -15,7 +15,7 @@ public class MyDLLNode<E>
 	 * constructor
 	 * @param element
 	 */
-	public MyDLLNode(E element ){
+	public MyDLLNode(E element){
 		this.element = element;
 		this.setNext(null);
 		this.setPrev(null);
@@ -27,6 +27,10 @@ public class MyDLLNode<E>
 	 */
 	public E getElement() {
 		return element;
+	}
+	
+	public void setElement(E element) {
+		this.element = element;
 	}
 
 	/**

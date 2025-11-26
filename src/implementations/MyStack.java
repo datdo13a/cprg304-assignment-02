@@ -205,7 +205,6 @@ public class MyStack<E> implements StackADT<E> {
 	    return new StackIterator();
 	}
 	
-	// inside MyStack<E>
 	private class StackIterator extends Iterator<E> {
 	    // top to bottom
 	    private int cursor;
