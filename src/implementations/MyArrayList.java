@@ -219,9 +219,48 @@ public class MyArrayList<E> implements ListADT<E> {
         }
         return ret;
     }
+    
+    public boolean addAll(MyDLL<E> list) throws NullPointerException {
+        if (list == null) {
+            throw new NullPointerException("list is null");
+        }
+
+        int addSize = list.size();
+        if (addSize == 0) {
+            return false;
+        }
+
+        E[] toAddArr = list.toArray();
+        for (int i = 0; i < toAddArr.length; i++) {
+            if (toAddArr[i] == null) {
+                throw new NullPointerException("list has null element at " + i);
+            }
+        }
+
+        int required = size + addSize;
+        int newCap = elementArr.length;
+        
+        if (newCap == 0) {
+        	newCap = 1;
+        }
+        
+        while (newCap < required) {
+        	newCap *= 2;
+        }
+        
+        if (newCap != elementArr.length) {
+            resize(newCap);
+        }
+
+        for (int i = 0; i < toAddArr.length; i++) {
+            elementArr[size++] = (E) toAddArr[i];
+        }
+        return true;
+    }
+
 
     @Override
-    public implementations.Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>(this);
     }
 }
