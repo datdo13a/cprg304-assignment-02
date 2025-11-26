@@ -47,13 +47,6 @@ public class Parser {
 
 				for (int i = 0; i < tags.size(); i++) {
 					String tag = tags.get(i);
-
-					// optional: skip comments, processing instructions, DOCTYPE
-					if (tag.startsWith("<!--") || tag.startsWith("<?") || tag.matches("^<\\s*!DOCTYPE.*")) {
-						continue;
-					}
-
-					// store tag with the line number it was found on
 					allTags.add(new TagEntry(tag, lineNum));
 				}
 			}

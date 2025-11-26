@@ -4,6 +4,7 @@ import exceptions.EmptyQueueException;
 
 public class AppDriver {
 
+	// example arg: ./res/sample1.xml or ./res/sample2.xml
 	/**
 	 * @author airzy, eric, dat, sohan
 	 * @param args
@@ -16,7 +17,7 @@ public class AppDriver {
 
 		String filepath = args[0];
 		Parser xmlParser = new Parser();
-		try {
+		try { // todo maybe move this try catch inside the parser
 			xmlParser.parse(filepath);
 		} catch (EmptyQueueException e) {
 			// TODO Auto-generated catch block
