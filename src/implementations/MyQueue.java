@@ -1,7 +1,6 @@
 package implementations;
 
 import exceptions.EmptyQueueException;
-import utilities.IteratorADT;
 import utilities.QueueADT;
 import implementations.Iterator;
 
@@ -172,7 +171,7 @@ public class MyQueue<E> implements QueueADT<E>{
 	}
 
 	@Override
-	public Iterator<E> iterator() {
-		return new Iterator<E>(elementArr);
+	public implementations.Iterator<E> iterator() {
+		return new implementations.Iterator<E>(elementArr);
 	}
 }

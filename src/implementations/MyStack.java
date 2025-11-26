@@ -3,7 +3,8 @@ package implementations;
 import utilities.StackADT;
 import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
-import java.util.Iterator;
+import implementations.Iterator;
+import utilities.IteratorADT;
 
 /**
  * Implementing a stack that is based on MyArrayList.java
@@ -77,45 +78,42 @@ public class MyStack<E> implements StackADT<E> {
         return elementArr.isEmpty();
     }
 
-    /**
-     * Uses the Array List's toArray() function.
-     * @return an array containing all of the elements in this list in proper sequence.
-     */
     public Object[] toArray() {
-        return elementArr.toArray();
+        int size = elementArr.size();
+        Object[] arr = new Object[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = elementArr.get(size - 1 - i); // top → bottom
+        }
+        return arr;
     }
-
-    /**
-     * To create an array when given a parameter.
-     * @param holder
-     * @return the array into which the elements of this stack are to be
-     * stored, if it is big enough; otherwise, a new array of the same
-     * runtime type is allocated for this purpose.
-     * @throws NullPointerException
-     */
-    public E[] toArray( E[] holder ) throws NullPointerException {
+    
+    @SuppressWarnings("unchecked")
+    public E[] toArray(E[] holder) throws NullPointerException {
         if (holder == null) {
             throw new NullPointerException("The holder element must not be null.");
         }
-        if (holder.length    < elementArr.size()) {
-            // if the array size is too small
-            Object[] newArray = new Object[elementArr.size()];
-            for (int i = 0; i < elementArr.size(); i++) {
-                newArray[i] = elementArr.get(i);
+
+        int size = elementArr.size();
+
+        // holder too small, create new arr of the same type as holder
+        if (holder.length < size) {
+        	E[] newArray = (E[]) java.util.Arrays.copyOf(holder, size);
+            for (int i = 0; i < size; i++) {
+                // top to bottom
+                newArray[i] = elementArr.get(size - 1 - i);
             }
-            return (E[]) newArray;
-        }
-        else {
-            // if the array is the same or bigger in size (if it is bigger, create null elements after)
-            for (int i = 0; i < elementArr.size(); i++) {
-                holder[i] = (E) elementArr.get(i);
+            return newArray;
+        } else {
+            // holder is big enough top to bottom again
+            for (int i = 0; i < size; i++) {
+                holder[i] = elementArr.get(size - 1 - i);
             }
-            if (holder.length > elementArr.size()) {
-                holder[elementArr.size()] = null;
+            if (holder.length > size) {
+                holder[size] = null;
             }
             return holder;
         }
-    };
+    }
 
     /**
      *  Returns true if this list contains the specified element. More formally,
@@ -160,15 +158,6 @@ public class MyStack<E> implements StackADT<E> {
     }
 
     /**
-     * Returns an iterator over the elements in this stack in proper sequence.
-     * Takes methods from Iterator.java
-     * @return an iterator over the elements in this stack in proper sequence.
-     */
-    public Iterator<E> iterator() {
-        return new StackIterator();
-    }
-
-    /**
      *
      * @param that
      * @return
@@ -183,7 +172,7 @@ public class MyStack<E> implements StackADT<E> {
         }
 
         Iterator<E> thisIterator = this.iterator();
-        Iterator<E> thatIterator = that.iterator();
+        Iterator<E> thatIterator = (Iterator<E>) that.iterator();
 
         while (thisIterator.hasNext()) {
             E thisElement = thisIterator.next();
@@ -210,28 +199,35 @@ public class MyStack<E> implements StackADT<E> {
     public boolean stackOverflow() {
         return false;
     }
+    
+	@Override
+	public Iterator<E> iterator() {
+	    return new StackIterator();
+	}
+	
+	// inside MyStack<E>
+	private class StackIterator extends Iterator<E> {
+	    // top to bottom
+	    private int cursor;
 
-    /**
-     * Inner class implementing java.util.Iterator
-     */
-    private class StackIterator implements Iterator<E> {
-        private int currentIndex = 0;
+	    public StackIterator() {
+	        super(elementArr);
+	        this.cursor = elementArr.size() - 1;
+	    }
 
-        @Override
-        public boolean hasNext() {
-            return currentIndex < elementArr.size();
-        }
+	    @Override
+	    public boolean hasNext() {
+	        return cursor >= 0;
+	    }
 
-        @Override
-        @SuppressWarnings("unchecked")
-        public E next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException("No more elements in stack");
-            }
-            E element = (E) elementArr.get(currentIndex);
-            currentIndex++;
-            return element;
-        }
-    }
+	    @Override
+	    public E next() {
+	        if (!hasNext()) throw new NoSuchElementException();
+	        E element = elementArr.get(cursor);
+	        cursor--;
+	        return element;
+	    }
+	}
+
 
 }
