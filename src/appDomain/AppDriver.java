@@ -1,10 +1,19 @@
 package appDomain;
 
+/**
+ * the main app
+ * @author Airzy, Eric, Dat, Sohan
+ * @version 1.0
+ */
 public class AppDriver {
 
-	// example arg: ./res/sample1.xml or ./res/sample2.xml
 	/**
-	 * @author airzy, eric, dat, sohan
+	 * this is the main method
+	 * 
+	 * sample args:
+	 *./res/sample1.xml
+	 *./res/sample2.xml
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {

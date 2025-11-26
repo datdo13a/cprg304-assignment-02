@@ -4,13 +4,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import implementations.Iterator;
 import implementations.MyArrayList;
 import implementations.MyQueue;
 import implementations.MyStack;
 
 import exceptions.EmptyQueueException;
 
+/**
+ * this class is the XML parser
+ * deals with finding the errors in an xml file
+ * @author Airzy, Eric, Dat, Sohan
+ * @version 1.0
+ */
 public class Parser {
 	
 	public Parser() {
@@ -88,6 +93,7 @@ public class Parser {
 
 	
 	/**
+	 * reads tags and performs the kittyparser algo to find errors
 	 * this basicly the part in the kittyparser example
 	 * @param allTags
 	 * @throws EmptyQueueException
@@ -100,7 +106,7 @@ public class Parser {
 		// basicly the kitty parser template
 		// TODO needs bit more work
 	
-		MyStack<TagEntry> errors = new MyStack<TagEntry>();
+		MyStack<TagEntry> errorsList = new MyStack<TagEntry>();
 		for (int i = 0; i < allTags.size(); i++) {
 			TagEntry te = allTags.get(i);
 			if (te.isSelfClosing()) { // if self closing tag
@@ -182,28 +188,28 @@ public class Parser {
 					extrasQ.dequeue();
 				} else {
 					TagEntry reported = errorQ.dequeue();
-					errors.push(reported);
-					//System.out.println("Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
+					errorsList.push(reported);
 				}
 			}
 
 			// Repeat until both queues are empty
 			while (!errorQ.isEmpty()) {
-				TagEntry reported = errorQ.dequeue();
-				//System.out.println("Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
+				//TagEntry reported = errorQ.dequeue();
+				errorQ.dequeue();
 			}
 
 			while (!extrasQ.isEmpty()) {
 				TagEntry reported = extrasQ.dequeue();
-				errors.push(reported);
-				//System.out.println("Error at line: " + reported.line + " " + reported.tag + " is not constructed correctly.");
+				errorsList.push(reported);
 			}
 		}
 		
-		if (errors.size() == 0) {
+		if (errorsList.size() == 0) { // yay no errors
 			System.out.println("XML document is constructed correctly.");
 		} else {
-		    Object[] objArr = errors.toArray();
+			// this part sorts the errors by line number and displays...
+			
+		    Object[] objArr = errorsList.toArray();
 		    int n = objArr.length;
 
 		    // cast to TagEntry[]
@@ -221,6 +227,10 @@ public class Parser {
 		}
 	}
 	
+	/**
+	 * parses file into tags
+	 * @param filepath
+	 */
 	public void parse(String filepath) {
 		System.out.println("Filepath: " + filepath);
 		MyArrayList<TagEntry> allTags = readFilePath(filepath);
