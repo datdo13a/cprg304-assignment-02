@@ -43,6 +43,15 @@ public class TagEntry {
 	}
 
 	/**
+	 * if another TagEntry based on getTagName of both entries
+	 * @param other another TagEntry
+	 * @return true if equals
+	 */
+	boolean equalsTagName(TagEntry other) {
+	    return getTagName().equals(other.getTagName());
+	}
+	
+	/**
 	 * stripping brackets, slashes, and attributes
 	 * @return the XML tag name only, 
 	 */

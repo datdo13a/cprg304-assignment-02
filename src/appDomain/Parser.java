@@ -93,7 +93,6 @@ public class Parser {
 
 	
 	/**
-	 * reads tags and performs the kittyparser algo to find errors
 	 * this basicly the part in the kittyparser example
 	 * @param allTags
 	 * @throws EmptyQueueException
@@ -119,8 +118,6 @@ public class Parser {
 			}
 
 			if (te.isEndTag()) { // if end tag
-				String endName = te.getTagName();
-
 				// Else if stack is empty, add to errorQ
 				if (readingStack.isEmpty()) {
 					extrasQ.enqueue(te);
@@ -128,26 +125,27 @@ public class Parser {
 				}
 
 				TagEntry top = readingStack.peek();
-				String topName = top.getTagName();
 				// if matches top of stack
-				if (topName.equals(endName)) {
+				if (top.equals(te)) {
 					readingStack.pop(); // pop stack
 					continue; // all is well
 				}
 
 				// Else if matches head of errorQ, dequeue and ignore
-				if (!errorQ.isEmpty() && errorQ.peek().getTagName().equals(endName)) {
+				if (!errorQ.isEmpty() && errorQ.peek().equals(te)) {
 					errorQ.dequeue();
 					continue;
 				}
 
 				// Else
+				
+				// Search stack for matching Start_Tag
 				boolean found = false;
 				MyStack<TagEntry> temp = new MyStack<>();
-
+				String endName = te.getTagName();
 				while (!readingStack.isEmpty()) {
 					TagEntry popped = readingStack.pop();
-					if (popped.getTagName().equals(endName)) {
+					if (popped.isStartTag() && popped.getTagName().equals(endName)) {
 						found = true;
 						break;
 					}
@@ -156,8 +154,11 @@ public class Parser {
 
 				// stack has a match
 				if (found) {
+					// Pop each E from stack into errorQ until match, report as error 
 					while (!temp.isEmpty()) {
-						errorQ.enqueue(temp.pop());
+						TagEntry reported = temp.pop();
+						errorQ.enqueue(reported);
+						errorsList.push(reported);
 					}
 				} else {
 					// Add E to extrasQ
@@ -176,17 +177,29 @@ public class Parser {
 			}
 
 			// uhh
+			// If either queue is empty (but not both), report each E in both queues as error 
+			/*
+			while (!errorQ.isEmpty() || !extrasQ.isEmpty()) {
+			    if (!errorQ.isEmpty() && extrasQ.isEmpty()) {
+			        TagEntry e = errorQ.dequeue();
+			        errorsList.push(e);
+			    } else if (errorQ.isEmpty() && !extrasQ.isEmpty()) {
+			        TagEntry e = extrasQ.dequeue();
+			        errorsList.push(e);
+			    } else {
+			        break;
+			    }
+			}*/
 			
 			// If both queues are not empty, peek both queues
 			while (!errorQ.isEmpty() && !extrasQ.isEmpty()) {
-
 				TagEntry e = errorQ.peek();
 				TagEntry x = extrasQ.peek();
 
-				if (e.getTagName().equals(x.getTagName())) {
+				if (e.equals(x)) { // dequeue from both 
 					errorQ.dequeue();
 					extrasQ.dequeue();
-				} else {
+				} else { // If they don’t match, dequeue from errorQ and report as error 
 					TagEntry reported = errorQ.dequeue();
 					errorsList.push(reported);
 				}
@@ -194,13 +207,11 @@ public class Parser {
 
 			// Repeat until both queues are empty
 			while (!errorQ.isEmpty()) {
-				//TagEntry reported = errorQ.dequeue();
 				errorQ.dequeue();
 			}
 
 			while (!extrasQ.isEmpty()) {
-				TagEntry reported = extrasQ.dequeue();
-				errorsList.push(reported);
+				extrasQ.dequeue();
 			}
 		}
 		
@@ -237,20 +248,28 @@ public class Parser {
 
 		// for debugging
 		/*
-		 * for (int i = 0; i < allTags.size(); i++) { TagEntry te = allTags.get(i);
-		 * System.out.println("LINE " + te.line + " = " + te.tag);
-		 * 
-		 * if (te.isStartTag()) { System.out.println("   isStartTag = true"); }
-		 * 
-		 * if (te.isEndTag()) { System.out.println("     isEndTag = true"); }
-		 * 
-		 * if (te.isSelfClosing()) { System.out.println(" isSelfClosing = true"); }
-		 * 
-		 * if (te.isStartTag() || te.isEndTag() || te.isSelfClosing()) {
-		 * System.out.println("      tagName = " + te.getTagName()); }
-		 * 
-		 * System.out.println(); }
-		 */
+		for (int i = 0; i < allTags.size(); i++) {
+			TagEntry te = allTags.get(i);
+			System.out.println("LINE " + te.line + " = " + te.tag);
+
+			if (te.isStartTag()) {
+				System.out.println("   isStartTag = true");
+			}
+
+			if (te.isEndTag()) {
+				System.out.println("     isEndTag = true");
+			}
+
+			if (te.isSelfClosing()) {
+				System.out.println(" isSelfClosing = true");
+			}
+
+			if (te.isStartTag() || te.isEndTag() || te.isSelfClosing()) {
+				System.out.println("      tagName = " + te.getTagName());
+			}
+
+			System.out.println();
+		}*/
 
 		//
 
