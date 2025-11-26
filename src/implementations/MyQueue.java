@@ -20,7 +20,7 @@ public class MyQueue<E> implements QueueADT<E> {
      * Enqueue will place the added item at the last position in the queue. This
      * method will not allow <code>null</code> values to be added to the Queue.
      *
-     * @param toAdd the item to be added to the Queue.
+     * @param obj the item to be added to the Queue.
      * @throws NullPointerException raised when a <code>null</code> object is placed
      *                              in the Queue.
      */
@@ -78,7 +78,7 @@ public class MyQueue<E> implements QueueADT<E> {
      * Used to compare two Queue ADT's. To be equal two queues must contain equal
      * items appearing in the same order.
      *
-     * @param that the Queue ADT to be compared to this queue.
+     * @param otherQueue the Queue ADT to be compared to this queue.
      * @return <code>true</code> if the queues are equal.
      */
     public boolean equals(QueueADT<E> otherQueue) {
@@ -133,7 +133,7 @@ public class MyQueue<E> implements QueueADT<E> {
      * the queue; the first item on the stack is considered to be at distance
      * 1. The equals method is used to compare o to the items in this queue.
      *
-     * @param toFind
+     * @param obj
      *            the desired object.
      * @return the 1-based position from the top of the queue where the object
      *         is located; the return value -1 indicates that the object is not
