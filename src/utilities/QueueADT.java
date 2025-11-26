@@ -69,7 +69,7 @@ public interface QueueADT<E> {
      * @param otherQueue the other queue to compare to.
      * @return true if queues contain identical elements in the same order; false otherwise
      */
-    public boolean isEquals(QueueADT<E> otherQueue);
+    public boolean equals(QueueADT<E> otherQueue);
 
     /**
      * convert the queue contents to an Object array from head to tai.

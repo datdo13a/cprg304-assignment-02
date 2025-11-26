@@ -65,12 +65,27 @@ public class MyQueue<E> implements QueueADT<E>{
 	/**
 	 * checks to see if two queues are the same
 	 */
-	public boolean isEquals(QueueADT<E> otherQueue) {
-		if(elementArr == otherQueue) {
-			return true;
-		}
-		return false;
+	public boolean equals(QueueADT<E> otherQueue) {
+		if (this == otherQueue) return true;  // same ref
+	    if (otherQueue == null) return false; // null check
+
+	    QueueADT<?> other = (QueueADT<?>) otherQueue;
+
+	    if (this.size() != other.size()) return false;
+
+	    Object[] a = this.toArray();
+	    Object[] b = other.toArray();
+
+	    for (int i = 0; i < a.length; i++) {
+	        if (a[i] == null) {
+	            if (b[i] != null) return false;
+	        } else {
+	            if (!a[i].equals(b[i])) return false;
+	        }
+	    }
+	    return true;
 	}
+
 	/**
 	 * returns the queue as an array
 	 */
