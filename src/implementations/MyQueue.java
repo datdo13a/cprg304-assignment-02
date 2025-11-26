@@ -104,9 +104,9 @@ public class MyQueue<E> implements QueueADT<E>{
 		if(arr == null) {
 			throw new NullPointerException("The holder element must not be null");
 		}
-		if (arr.length    < elementArr.size()) {
+		if (arr.length < elementArr.size()) {
             // if the array size is too small
-            Object[] newArray = new Object[elementArr.size()];
+			E[] newArray = (E[]) java.util.Arrays.copyOf(arr, elementArr.size());
             for (int i = 0; i < elementArr.size(); i++) {
                 newArray[i] = elementArr.get(i);
             }
@@ -125,21 +125,25 @@ public class MyQueue<E> implements QueueADT<E>{
 	}
 
 	/**
-	 * returns the position found where the element is equal to the input object
-	 * @param obj the object you want to search the position for
-	 * @return int position of the element
+	 * returns the 1-based index of the element from the queue front. -1 if none found.
+	 *
+	 * @param obj to search for
+	 * @return 1-based index from the front, or -1 not found
+	 * @throws NullPointerException if arg obj is null
 	 */
 	public int search(E obj) {
-		if(obj == null) {
-			throw new NullPointerException("Must not be a null element");
-		}
-		for ( int i = elementArr.size() - 1; i >= 0; i--) {
-            if (obj.equals(elementArr.get(i))) {
-                return elementArr.size() - i;
-            }
-        }
-		return -1;
+	    if (obj == null) {
+	        throw new NullPointerException("Must not be a null element");
+	    }
+	    int sz = elementArr.size();
+	    for (int i = 0; i < sz; i++) {
+	        if (obj.equals(elementArr.get(i))) {
+	            return i + 1; // +1 cuz from head of the que
+	        }
+	    }
+	    return -1; // not found
 	}
+
 
 	/**
 	 * returns if a specified object is found in the queue
